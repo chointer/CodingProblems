@@ -4,8 +4,7 @@ def solution(keymap, targets):
     # make dict
     dict_key = {}
     for keym in keymap:
-        count = 0
-        for k in keym:
+        for count, k in enumerate(keym):
             count += 1
             if k not in dict_key or dict_key[k] > count:
                 dict_key[k] = count
