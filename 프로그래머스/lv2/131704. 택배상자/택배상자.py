@@ -14,7 +14,7 @@ def solution(order):
         elif saver and order[0] == saver[0]:
             order.popleft()
             saver.popleft()
-        elif boxes and saver_size < 5:
+        elif boxes:
             saver.appendleft(boxes.popleft())
         else:
             break
