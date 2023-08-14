@@ -1,4 +1,6 @@
 # 가장 높은 10의 자리 수에서 내려가는 방향만 고려하도록 해서 틀림.
+# 아래처럼 많이 탐색 할 필요 없었다고 함. (대부분의 경우 최소 방법이 정해져 있어서)
+
 def solution(storey):
     floors = [(storey, 0)]       # (floor, used stones)
     record = sum(map(int, list(str(storey))))
