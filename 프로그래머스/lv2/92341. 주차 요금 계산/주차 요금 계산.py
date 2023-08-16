@@ -1,3 +1,5 @@
+# 22m 33s
+
 from collections import defaultdict
 
 def solution(fees, records):
