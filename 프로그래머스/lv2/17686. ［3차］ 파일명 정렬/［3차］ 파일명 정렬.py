@@ -1,3 +1,4 @@
+# ~30m
 # 10**3 simple sort
 from collections import deque
 
