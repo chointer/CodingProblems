@@ -1,5 +1,5 @@
 # sort lambda, bitwise XOR
-# 2,500 * 500 = 1,250,000
+# 20m
 
 def solution(data, col, row_begin, row_end):
     # 1 & 2 (Sorting)
