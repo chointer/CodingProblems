@@ -1,4 +1,5 @@
 # N(Users) <= 100, N(Emo) <= 7
+# 60m
 # 아.. 할인율 단위가 10이라는 것을 못봐서 30분동안 전략을 찾지 못함.
 # 경우의 수 = (할인율) ** (이모티콘 수) <= 4**7 ~ 1e4
 # 이모티콘마다, 할인율마다, 구매여부 기록  [[[할인된 가격 ... 가격] 4개], ]
@@ -6,7 +7,6 @@
 
 from itertools import product
 
-def subsol(): pass
 def solution(users, emoticons):
     
     # record buy
