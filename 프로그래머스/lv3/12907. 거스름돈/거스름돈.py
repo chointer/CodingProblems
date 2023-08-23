@@ -8,6 +8,7 @@
 # 너무 어렵다!
 
 def solution(n, money):
+    money.sort()
     dp = [[0 for _ in range(len(money))] for _ in range(n)]
     dp_t = [0 for _ in range(n)]
     
