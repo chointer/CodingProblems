@@ -1,6 +1,7 @@
 # N <= 200 -> max ~ N**3?
 # (1) S에서 각자 가는 경우 계산: Dijkstra N**2, 모든 위치를 S로 해서 계산? -> N**3
 # (2) Floyd-Warshall?  [선택]
+# 풀이 중에, s, a, b에 대해 Dijkstra 계산하고, 각 node를 분기점으로 했을 때의 cost를 계산하는 방법이 있었다.
 
 def solution(n, s, a, b, fares):
     # initialize
