@@ -1,5 +1,7 @@
 # topping <= 1e6
 # 6m 14s
+# 이진탐색도 된다.
+
 from collections import Counter
 
 def solution(topping):
