@@ -1,10 +1,6 @@
 # arr <= 100, commands <= 50
 # cmd * arr*log(arr) ~ 50*100*2 = 1e5
 
-def find(subarr, k):
-    return sorted(subarr)[k-1]
-
-
 def solution(array, commands):
     answer = []
     
