@@ -1,16 +1,13 @@
-# 500 * 500
-# 완전탐색? and range?
+# land <= (500, 500)
 
 import heapq
-def search_area(x, y, land):
-    ysize = len(land)
-    xsize = len(land[0])
-    dxs = [1, -1, 0, 0]
-    dys = [0, 0, 1, -1]
-    
-    xmin, xmax = x, x
+
+def dfs(y, x, land, W, H):
+    moves = [(1, 0), (-1, 0), (0, 1), (0, -1)]
     stack = [(y, x)]
-    area = 0
+    amount = 0
+    x0 = x
+    x1 = x
     
     while stack:
         y, x = stack.pop()
@@ -18,42 +15,40 @@ def search_area(x, y, land):
             continue
         else:
             land[y][x] = 0
-            area += 1
-            xmin = min(xmin, x)
-            xmax = max(xmax, x)
+            amount += 1
+            x0 = min(x0, x)
+            x1 = max(x1, x)
             
-            for dx, dy in zip(dxs, dys):
-                x_temp = x + dx
-                y_temp = y + dy
-                if x_temp >= 0 and x_temp < xsize and \
-                y_temp >= 0 and y_temp < ysize and \
-                land[y_temp][x_temp] == 1:
-                    stack.append((y_temp, x_temp))
-    
-    return (xmin, xmax, area)
-    
-
-def search_oils(land):
-    oils = []
-    for y, la in enumerate(land):
-        for x, l in enumerate(la):
-            if l == 1:
-                oils.append(search_area(x, y, land))
-    return oils
+        for dy, dx in moves:
+            yy = y + dy
+            xx = x + dx
+            if yy >= 0 and yy < H and xx >= 0 and xx < W and land[yy][xx] == 1:
+                stack.append((yy, xx))
+    return x0, x1, amount
     
 def solution(land):
-    oils = search_oils(land)
-
+    H = len(land)
+    W = len(land[0])
+    deposits = []       # (x0, x1, amount)
+    
+    for y in range(H):
+        for x in range(W):
+            if land[y][x] == 1:
+                deposits.append(dfs(y, x, land, W, H))
+    
     hq = []
-    for oil in oils:
-        heapq.heappush(hq, (oil[0], oil[2]))
-        heapq.heappush(hq, (oil[1] + 1, -oil[2]))
+    for deposit in deposits:
+        x0, x1, a = deposit
+        heapq.heappush(hq, (x0, a))
+        heapq.heappush(hq, (x1 + 1, -a))
     
-    max_amount = 0
-    amount = 0
-    while hq:
-        x, area = heapq.heappop(hq)
-        amount += area
-        max_amount = max(max_amount, amount)
+    amount_max = 0
+    amount_current = 0
     
-    return max_amount
+    for x in range(W):
+        while hq[0][0] <= x:
+            _, a = heapq.heappop(hq)
+            amount_current += a
+        amount_max = max(amount_max, amount_current)
+        
+    return amount_max
