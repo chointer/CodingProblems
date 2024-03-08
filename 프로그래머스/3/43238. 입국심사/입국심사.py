@@ -1,26 +1,20 @@
-# n <= 1e9, checker <= 1e5
-# sum(t 시간동안 각 심사관이 심사할 수 있는 사람 수)를 binary search.
+# N <= 1e9. 심사관 <= 1e5
 
-def screening(k, times):
-    people = 0
-    for t in times:
-        people += k//t
-    return people
+def is_possible(t, n, times):
+    n_max = 0
+    for ti in times:
+        n_max += t//ti
+    return n_max >= n
 
 def solution(n, times):
     st = 0
-    en = max(times) * n
+    en = n * min(times)
     
-    while st <= en:
+    while st < en:
         mid = (st + en) // 2
-        n_in_t = screening(mid, times)
-        
-        if n <= n_in_t:
-            en = mid - 1
+        if is_possible(mid, n, times):
+            en = mid
         else:
             st = mid + 1
-    
+
     return st
-        
-    answer = 0
-    return answer
