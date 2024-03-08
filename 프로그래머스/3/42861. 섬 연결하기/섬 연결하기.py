@@ -23,7 +23,7 @@ def union(a, b, parents):
         
         
 def solution(n, costs):
-    parents = [i for i in range(n + 1)]
+    parents = [i for i in range(n)]
     costs = sorted(costs, key=lambda x: x[2])
     answer = 0
     
@@ -32,4 +32,7 @@ def solution(n, costs):
         if unioned:
             answer += cost
     
+    for i in range(n):
+        parents[i] = find(i, parents)
+        
     return answer
