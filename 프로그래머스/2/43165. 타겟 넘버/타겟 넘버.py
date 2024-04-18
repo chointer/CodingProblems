@@ -1,18 +1,36 @@
-from collections import deque
+# 2**20 ~ 10**6
+# DFS
 def solution(numbers, target):
-    answer = 0
-    N = len(numbers)
-    q = deque([(0, 0)])         # (current, idx_next)
-    
-    while q:
-        current, idx_next = q.popleft()
+    # (now, list_left)
+    count = 0
+    stack = [(0, numbers)]
+
+    while stack:
+        now, lefts = stack.pop()
+        if not lefts:   # end case
+            if now == target:
+                count += 1
+            else:
+                continue
         
-        if idx_next == N:
-            if current == target:
-                answer += 1
-            continue
-        
-        q.append((current + numbers[idx_next], idx_next + 1))
-        q.append((current - numbers[idx_next], idx_next + 1))
+        else:
+            stack.append((now + lefts[0], lefts[1:]))
+            stack.append((now - lefts[0], lefts[1:]))
+    return count
+
+
+
+
+
+
+
+"""
+def func(nums, tar, val, idx):
+    if idx == -1:
+        return 1 if val == tar else 0
     
-    return answer
+    return func(nums, tar, val+nums[idx], idx - 1) + func(nums, tar, val-nums[idx], idx - 1)
+            
+def solution(numbers, target):
+    return func(numbers, target, 0, len(numbers)-1)
+"""
