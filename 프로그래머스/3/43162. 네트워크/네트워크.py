@@ -1,37 +1,19 @@
-# union-find도 될 것 같은데, BFS로 풀어보기
-# O(N**2) -> 40000
-
-from collections import deque
-
-def dfs(start, visits, computers):
-    q = deque([start])
-    
-    while q:
-        now = q.popleft()
-        
-        if visits[now]:
-            continue
-        
-        visits[now] = True
-
-        for i, connect in enumerate(computers[now]):
-            if connect == 1 and not visits[i]:
-                q.append(i)
-    
-    return visits
-
-
-
+# n <= 200
+# DFS/BFS로 풀어보기. stack DFS
 def solution(n, computers):
-    N_networks = 0
-    visits = [False for i in range(n)]
+    visited = [False for _ in range(n)]
+    count = 0
 
     for i in range(n):
-        if visits[i]:
+        if visited[i]:
             continue
-        
-        else:
-            N_networks += 1
-            visits = dfs(i, visits, computers)
-
-    return N_networks
+        count += 1
+        stack = [i]
+        while stack:
+            computer = stack.pop()
+            if not visited[computer]:
+                visited[computer] = True
+                for neighbor, connected in enumerate(computers[computer]):
+                    if connected and not visited[neighbor]:
+                        stack.append(neighbor)
+    return count
