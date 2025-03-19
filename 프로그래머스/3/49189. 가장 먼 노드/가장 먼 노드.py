@@ -1,26 +1,40 @@
-# '1'에서 각 노드까지의 거리 계산
+# N <= 2e4, E <= 5e4
+# 각 노드별 거리를 구하고 카운트 해야 한다.
+# O(N) = E + N log N? 알아보기
 
-import heapq
+import heapq as hq
+
 def solution(n, edge):
-    node_dict = {i: [] for i in range(1, n + 1)}
-    for e in edge:
-        node_dict[e[0]].append(e[1])
-        node_dict[e[1]].append(e[0])
+    # edge list
+    edge_list = [[] for _ in range(n)]
+    for p1, p2 in edge:
+        p1 -= 1
+        p2 -= 1
+        edge_list[p1].append(p2)
+        edge_list[p2].append(p1)
+
+    # search
+    distances = [n + 1 for _ in range(n)]
+    distances[0] = 0
+    checks = [(0, 0)]        # (distance, node_id - 1)
     
-    dists = [100000 for i in range(n + 1)]
-    dists[1] = 0
-    hq = [(0, 1)]           # dist, node
-    
-    while hq:
-        dist, node = heapq.heappop(hq)
-        if dist > dists[node]:
+    while checks:
+        dist, node = hq.heappop(checks)
+        if distances[node] < dist:
             continue
+                
+        for neighbor in edge_list[node]:
+            if distances[neighbor] > dist + 1:
+                distances[neighbor] = dist + 1
+                hq.heappush(checks, (dist + 1, neighbor))
         
-        for to in node_dict[node]:
-            if dist + 1 < dists[to]:
-                dists[to] = dist + 1
-                heapq.heappush(hq, (dist + 1, to))
-        
-    dist_max = max(dists[1:])
+    distance_farthest = 0
+    count = 1
+    for i in distances:
+        if distance_farthest < i:
+            distance_farthest = i
+            count = 1
+        elif distance_farthest == i:
+            count += 1
     
-    return dists.count(dist_max)
+    return count
