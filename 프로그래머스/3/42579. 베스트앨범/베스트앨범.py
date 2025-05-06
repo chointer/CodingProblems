@@ -1,30 +1,54 @@
-# N <= 1e4
-# sort. N log N * 1e2 = 1e7
-
+# 장르별로 (번호, 재생 수)
 from collections import defaultdict
-import heapq as hq
 
 def solution(genres, plays):
-    count_dict = defaultdict(int)
-    song_dict = defaultdict(list)
+    total_plays = defaultdict(int)
+    id_and_plays = defaultdict(list)
     
-    # survey
     for i, (genre, play) in enumerate(zip(genres, plays)):
-        count_dict[genre] += play
-        hq.heappush(song_dict[genre], (-play, i))
+        total_plays[genre] += play
+        id_and_plays[genre].append((play, i))
     
-    # sort genre
-    count_genres = []
-    for genre, count_total in count_dict.items():
-        hq.heappush(count_genres, (-count_total, genre))
+    total_plays = sorted([(v, k) for k, v in total_plays.items()], reverse=True)
+    total_plays = [element[1] for element in total_plays]
     
-    # make answer
     answer = []
-    while count_genres:
-        i, genre = hq.heappop(count_genres)
-        song_count = 0
-        while song_dict[genre] and song_count < 2:
-            answer.append(hq.heappop(song_dict[genre])[1])
-            song_count += 1
-        
+    for genre in total_plays:
+        element_id_play = sorted(id_and_plays[genre], key=lambda x: (-x[0], x[1]))
+        for i in range(min(len(element_id_play), 2)):
+            answer.append(element_id_play[i][1])
+            
     return answer
+                                 
+        
+    
+
+"""
+def solution(genres, plays):
+    gen_play = {}   # gen: (play, id)
+    gen_cnt = {}    # gen: cnt
+    
+    for i in set(genres):
+        gen_play[i] = []
+        gen_cnt[i] = 0
+        
+    for i in range(len(genres)):
+        gen_play[genres[i]].append((-plays[i], i))
+        gen_cnt[genres[i]] += plays[i]
+        
+    gen_order = []
+    for i in gen_cnt.keys():
+        gen_play[i].sort()
+        gen_order.append((gen_cnt[i], i))
+    gen_order.sort(reverse=True)
+    
+    answer = []
+    for _, gen in gen_order:
+        answer.append(gen_play[gen][0][1])
+        if len(gen_play[gen]) > 1:
+            answer.append(gen_play[gen][1][1])
+    
+    
+    
+    return answer
+"""
