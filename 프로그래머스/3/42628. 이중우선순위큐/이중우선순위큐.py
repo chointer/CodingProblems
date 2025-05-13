@@ -1,61 +1,76 @@
-# query <= 1e6
-# N log N
+# O(N) = NlogN*4
 
 import heapq as hq
 from collections import defaultdict
 
 def solution(operations):
-    # heapq
-    asc = []
-    desc = []
+    maxq = []
+    minq = []
+    max_delays = defaultdict(int)
+    min_delays = defaultdict(int)
     
-    # lazy deletion. 숫자마다 지워야 할 갯수 저장
-    todo_asc = defaultdict(int)
-    todo_desc = defaultdict(int)
-
     for operation in operations:
-        oper, obj = operation.split()
-        obj = int(obj)
-        
-        if oper == 'I':         # insert
-            hq.heappush(asc, obj)
-            hq.heappush(desc, -obj)
+        oper, val = operation.split()
+        if oper == "I":
+            hq.heappush(maxq, -int(val))
+            hq.heappush(minq, int(val))
             
-        elif oper == 'D':       # delete
-            # 빈 큐일 때 데이터 무시하는 것은 while 문에서 처리될 듯            
-            if obj == 1:        # delete max
-                while desc:
-                    pop = -hq.heappop(desc)
-                    if todo_desc[pop] > 0:
-                        todo_desc[pop] -= 1
-                    else:
-                        todo_asc[pop] += 1
-                        break
+        elif val == "1":
+            while maxq and max_delays[-maxq[0]] > 0:
+                del_val = -hq.heappop(maxq)
+                max_delays[del_val] -= 1
+            if maxq:
+                max_val = -hq.heappop(maxq)
+                min_delays[max_val] += 1
                 
-            elif obj == -1:     # delete min
-                while asc:
-                    pop = hq.heappop(asc)
-                    if todo_asc[pop] > 0:
-                        todo_asc[pop] -= 1
-                    else:
-                        todo_desc[pop] += 1
-                        break
-        
-    # 마지막 정리
-    while desc:
-        if todo_desc[-desc[0]] > 0:
-            todo_desc[-desc[0]] -= 1
-            hq.heappop(desc)
-        else:
-            break
+        elif val == "-1":
+            while minq and min_delays[minq[0]] > 0:
+                del_val = hq.heappop(minq)
+                min_delays[del_val] -= 1
+            if minq:
+                min_val = hq.heappop(minq)
+                max_delays[min_val] += 1
+
+    ### END
+    while maxq and max_delays[-maxq[0]] > 0:
+        del_val = -hq.heappop(maxq)
+        max_delays[del_val] -= 1
+    if maxq:
+        max_val = -hq.heappop(maxq)
+    else:
+        max_val = 0
+
+    while minq and min_delays[minq[0]] > 0:
+        del_val = hq.heappop(minq)
+        min_delays[del_val] -= 1
+    if minq:
+        min_val = hq.heappop(minq)
+    else:
+        min_val = 0
+
+    return [max_val, min_val]
+
     
-    while asc:
-        if todo_asc[asc[0]] > 0:
-            todo_asc[asc[0]] -= 1
-            hq.heappop(asc)
-        else:
-            break
+"""
+def solution(operations):
+    q = []
     
-    answer_max = 0 if not desc else -desc[0]
-    answer_min = 0 if not asc else asc[0]
-    return (answer_max, answer_min)
+    for oper in operations:
+        op1, op2 = oper.split()
+        if op1 == 'I':
+            q.append(int(op2))
+            q.sort()
+            
+        elif op1 == 'D' and q:
+            if op2 == '1':
+                del q[-1]
+            elif op2 == '-1':
+                del q[0]
+                
+    
+    if q:
+        answer = [max(q), min(q)]
+    else:
+        answer = [0, 0]
+    return answer
+"""
