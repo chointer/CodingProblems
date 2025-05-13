@@ -1,10 +1,18 @@
-# arr <= 100, commands <= 50
-# cmd * arr*log(arr) ~ 50*100*2 = 1e5
+# arr <= 1e2, command <= 50
+# slice + sort -> arr + arr log arr 
 
 def solution(array, commands):
     answer = []
-    
-    for st, en, k in commands:
-        answer.append( sorted(array[st - 1 : en])[k-1] )
-
+    for (i, j, k) in commands:
+        arr = sorted(array[i-1: j])
+        answer.append(arr[k-1])
     return answer
+    
+"""
+def solution(array, commands):
+    answer = []
+    for coms in commands:
+        i, j, k = coms
+        answer.append(sorted(array[i-1:j])[k-1])
+    return answer
+"""
