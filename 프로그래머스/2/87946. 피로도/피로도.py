@@ -1,22 +1,47 @@
-# k < 5000, N(dungeons) <= 8
-# 완탐시, 8P8=8! ~ 40,000
+# k <= 5e3, dungeons <= 8
 
 from itertools import permutations
 
-def run_dungeons(k, seq):
-    count = 0
-    for i, s in enumerate(seq):
-        k_in, k_use = s
-        if k < k_in:
-            break
-        else:
-            k -= k_use
-            count += 1
-    return count
-            
-        
 def solution(k, dungeons):
-    answer = 0
-    for p in permutations(dungeons):
-        answer = max(answer, run_dungeons(k, p))
-    return answer
+    max_i = 0
+    
+    for seq in permutations(dungeons):
+        l = k
+        i = 0
+        for min_req, use in seq:
+            if l >= min_req:
+                i += 1
+                l -= use
+            else:
+                break
+            max_i = max(max_i, i)
+
+    
+    return max_i
+                
+            
+            
+
+"""
+from itertools import permutations
+
+def dungeoning(k, dungeons):
+    done = 0
+    for dungeon in dungeons:
+        low, cost = dungeon
+        if low <= k:
+            k -= cost
+            done += 1
+        else:
+            break
+    return done
+    
+def solution(k, dungeons):
+    d_max = 0
+    for dgs in permutations(dungeons):
+        d = dungeoning(k, dgs)
+        if d_max < d:
+            d_max = d
+    
+    return d_max
+"""
